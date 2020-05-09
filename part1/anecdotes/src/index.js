@@ -2,37 +2,34 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Quote = ({anecdotes, votes}) => <p> {anecdotes} has {votes} votes </p>
+const Button = ({onClick,text}) => <button onClick={onClick}>{text}</button>
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, newVotes] = useState(new Array(6+1).join('0').split('').map(parseFloat))
   const top = votes.indexOf(Math.max(...votes))
+
   const random = () => {
       let randomVal =  Math.floor(Math.random() * Math.floor(props.anecdotes.length))
-      console.log(votes)
       return setSelected(randomVal)
   } 
-  
   const voteQuote = () => {
     const copy = [...votes]
     copy[selected] += 1
-    
     newVotes(copy)
   }
 
-  
   return (
     <div>
-     <Quote anecdotes={props.anecdotes[selected]} votes={votes[selected]}/>
+      <Quote anecdotes={props.anecdotes[selected]} votes={votes[selected]}/>
       <Button onClick={() => random()} text={'random quote'} />
       <Button onClick={() => voteQuote()} text={'vote'} />
       <Quote anecdotes={props.anecdotes[top]} votes={votes[top]}/>
-
     </div>
   )
 }
 
-const Button = ({onClick,text}) => <button onClick={onClick}>{text}</button>
+
 
 const anecdotes = [
   'If it hurts, do it more often',
