@@ -1,44 +1,8 @@
 import React,{ useState } from 'react'
 
-
-
-const Numbers = (props) => {
-  const {name,number} = props
-  return (
-  <div>{name}: {number}</div>
-  )
-}
-
-const Filter = (props) => {
-  const {filterHandler, filterName} =  props
-  return (
-  <div>
-        filter shown with<input onChange={filterHandler} value={filterName} />
-  </div>
-  )
-}
-
-const PersonForm = (props) => {
-  
-  const {nameHandler,newName,numberHandler,newNumber,addPerson} = props
-  return (
-    <form>
-        <div>
-          name: <input onChange={nameHandler} value={newName} />
-        </div>
-         <div>
-          number: <input onChange={numberHandler} value={newNumber} />
-        </div>
-        <div>
-          <button onClick={addPerson} type="submit">add</button>
-        </div>
-      </form>
-    )
-  
-}
-
-
-
+import Filter from './components/Filter'
+import Numbers from './components/Numbers'
+import PersonForm from './components/PersonForm'
 
 
 
