@@ -7,6 +7,10 @@ import PersonForm from './components/PersonForm'
 
 
 
+
+
+
+
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas', number: '123-456-789' },
@@ -18,17 +22,17 @@ const App = () => {
   const [ filterName, setFilter] = useState('')
   const [filterState, setFilterState] = useState(false)
   
-    const nameHandler = (event) => {
+  const nameHandler = (event) => {
     
       setNewName(event.target.value)
-    }
+  }
     
-    const numberHandler = (event) => {
+  const numberHandler = (event) => {
     
       setNewNumber(event.target.value)
-    }
+  }
     
-     const filterHandler = (event) => {
+  const filterHandler = (event) => {
         setFilter(event.target.value)
         if(event.target.value !== '') setFilterState(true)
         
