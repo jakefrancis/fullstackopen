@@ -69,18 +69,36 @@ const App = () => {
     };
 
     const names = persons.map((person) => person.name);
-
+    const ids = persons.map((person => person.id))
     if (!names.includes(newPerson.name)) {
       personService
       .create(newPerson)
       .then(newEntry => {
-      setPersons(persons.concat(newEntry));
-      setNewName("");
-      setNewNumber("");
+        setPersons(persons.concat(newEntry));
+        setNewName("");
+        setNewNumber("");
       })
       
     } else {
-      alert(`${newPerson.name} already exists in phonebook`);
+      const result = window.confirm(
+        `${newPerson.name} is already in the phonebook, replace old
+        number with new one?
+      `)
+      if(result){
+        const index = names.indexOf(newPerson.name)
+        const id = ids[index]
+        console.log(persons)
+        console.log(id)
+        personService
+        .alterNumber(newPerson, id)
+        .then(response => {
+          const people = [...persons]
+          people[index].number = newPerson.number
+          setPersons(people)
+          setNewName("");
+          setNewNumber("");
+        })
+      }
     }
   };
 
