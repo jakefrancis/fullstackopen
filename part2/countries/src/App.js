@@ -65,6 +65,7 @@ const FullCountry = (props) => {
 const LimitDisplay = (props) => {
   const {filtered,showState,buttonHandler,weather} = props
   const leng = filtered.length
+  console.log(filtered)
 
   if(leng > 10) {
     return(
