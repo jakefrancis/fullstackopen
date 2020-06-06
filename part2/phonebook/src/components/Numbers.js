@@ -1,10 +1,11 @@
 import React from 'react'
 
 const Numbers = (props) => {
-    const {name,number} = props
+    const {person, removePerson} = props
     return (
-    <div>{
-        name}: {number}
+    <div>
+        <span>{person.name}: {person.number}</span><span> </span>
+        <button name={person.name} id={person.id} onClick={removePerson}>delete</button>
     </div>
     )
   }
