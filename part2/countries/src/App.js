@@ -6,11 +6,11 @@ import axios from 'axios';
 
 const Weather = (props) => {
 
-  const {weather} = props 
+  const {weather,capital} = props 
 
   return (
     <div>
-      <h2>Weather in {weather.location.name}</h2>
+      <h2>Weather in {capital}</h2>
       <p>temperature: {weather.current.temperature} C</p>
       <img src={weather.current.weather_icons[0]} alt={weather.current.weather_icons[1]}></img>
       <p>wind: {weather.current.wind_speed} mph direction{weather.current.wind_dir}</p>
@@ -65,7 +65,7 @@ const FullCountry = (props) => {
 const LimitDisplay = (props) => {
   const {filtered,showState,buttonHandler,weather} = props
   const leng = filtered.length
-  console.log(filtered)
+
 
   if(leng > 10) {
     return(
@@ -74,12 +74,12 @@ const LimitDisplay = (props) => {
   }  
   else if(leng === 1){
 
-    if(filtered[0].captial = 'Stockholm'){
-      console.log('stockholm')
+    if(weather !== null){
+
       return ( 
         <div>
         <FullCountry country={filtered[0]} />
-        <Weather weather={weather}/>
+        <Weather weather={weather} capital={filtered[0].capital}/>
         </div>
       )
     }
@@ -89,18 +89,20 @@ const LimitDisplay = (props) => {
         <FullCountry country={filtered[0]} />
       )
   }
-  if(showState.state){
+  if(showState.state && weather !== null){
     return(
+      <div>
       <FullCountry country={filtered[showState.index]}/>
+      <Weather weather={weather} capital={filtered[showState.index].capital}/>
+      </div>
     )
   }
   return(
     filtered.map((country,index) => {
-      console.log(country,index)
     
       return(
       <div>
-      <Country key={index} country={country.name} />
+      <Country key={index.name} country={country.name} />
       <ShowCountryButton index ={index} key={index} country={country.name} buttonHandler={buttonHandler} />
       </div>
       )
@@ -136,7 +138,7 @@ const App = () => {
   
   
   const dbHook = () => {
-    console.log('pending')
+  
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response =>{
@@ -158,29 +160,60 @@ const App = () => {
     }
   }
 
+  const filtered = filterState
+  ? countries.filter((country) =>
+      country.name.toLowerCase().includes(searchName.toLowerCase())
+    )
+  : countries;
+
+
+
   const weatherHook = () => {
 
-    let url =  'http://api.weatherstack.com/current?access_key=' + api_key + '&query=Stockholm'
+    let Capital = null
+    console.log(showState.state)
 
+    if(filtered.length === 1 || showState.state){
+      if (showState.state){
+        console.log(filtered[showState.index])
+        Capital = filtered[showState.index].capital
+      }
+      else{
+        Capital = filtered[0].capital
+      }
+    }
+    else{
+      Capital = null
+    }
+  
+
+
+
+  console.log(Capital)
+
+
+    let url =  'http://api.weatherstack.com/current?access_key=' + api_key + '&query=' + Capital
+    console.log(url)
+    if(Capital !== null){
     axios
       .get(url)
       .then(response => {
         setWeather(response.data)
-        console.log(response)
+    
       })   
+    }
+    else{
+      setWeather(null)
+    }
+
     
 }
 
-  useEffect(weatherHook,[])
+  useEffect(weatherHook,[filtered.length === 1 || showState.state])
 
-  const filtered = filterState
-    ? countries.filter((country) =>
-        country.name.toLowerCase().includes(searchName.toLowerCase())
-      )
-    : countries;
-  
+
   const buttonHandler = (event) => {
-    console.log('index', event.target.getAttribute('index'))
+ 
 
     setShowState({state: true, index: event.target.getAttribute('index')});
     
