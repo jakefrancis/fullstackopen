@@ -4,6 +4,7 @@ import personService from './services/persons'
 import Filter from "./components/Filter";
 import Numbers from "./components/Numbers";
 import PersonForm from "./components/PersonForm";
+import Notification from "./components/Notification"
 
 
 const App = () => {
@@ -12,6 +13,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilter] = useState("");
   const [filterState, setFilterState] = useState(false);
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(false)
 
   const dbHook = () => {
     personService
@@ -34,6 +37,7 @@ const App = () => {
         .removeEntry(id)
         .then(newEntry => {
           setPersons(persons.filter(person => person.id !== id))
+          notificationHandler(`${name} has been removed from the phonebok`,false)
         })
     }
 }
@@ -52,6 +56,16 @@ const App = () => {
     else setFilterState(false);
   };
 
+  const notificationHandler = (message,error) =>{
+    setMessage(`${message}`)
+    setError(error)
+    setTimeout(()=> {
+      setMessage(null)
+      setError(error)
+    },5000)
+    
+  }
+
   const filtered = filterState
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(filterName.toLowerCase())
@@ -61,14 +75,12 @@ const App = () => {
 
 
   const addPerson = (event) => {
-    event.preventDefault();
-
+    event.preventDefault()
     const newPerson = {
       name: newName,
       number: newNumber,
     };
-
-    const names = persons.map((person) => person.name);
+    const names = persons.map((person) => person.name)
     const ids = persons.map((person => person.id))
     if (!names.includes(newPerson.name)) {
       personService
@@ -77,6 +89,7 @@ const App = () => {
         setPersons(persons.concat(newEntry));
         setNewName("");
         setNewNumber("");
+        notificationHandler(`${newPerson.name} has been added to the phonebook`, false)
       })
       
     } else {
@@ -97,6 +110,13 @@ const App = () => {
           setPersons(people)
           setNewName("");
           setNewNumber("");
+          notificationHandler(`${newPerson.name} has been updated`,false)
+        })
+        .catch(error => {
+          notificationHandler(`Information for ${newPerson.name} has already been removed from the server`, true)
+          setPersons(persons.filter(person => person.id !== id))
+          setNewName("");
+          setNewNumber("");
         })
       }
     }
@@ -105,6 +125,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} error={error}/>
       <Filter filterHandler={filterHandler} filterName={filterName} />
       <h2>add new number</h2>
       <PersonForm
