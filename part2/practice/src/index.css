@@ -1,6 +1,10 @@
 h1 {
     color: green;
+<<<<<<< Updated upstream
     font-style: italic;    
+=======
+    font-style: italic;
+>>>>>>> Stashed changes
 }
 
 .note {
@@ -17,4 +21,8 @@ h1 {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+<<<<<<< Updated upstream
   }
+=======
+}
+>>>>>>> Stashed changes

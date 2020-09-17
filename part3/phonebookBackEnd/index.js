@@ -1,6 +1,8 @@
+const { json } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+<<<<<<< Updated upstream
 const app = express()
 
 
@@ -10,110 +12,154 @@ app.use(cors())
 const randomRange = 100000000000
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+=======
+const { default: Axios } = require('axios')
 
-morgan.token('body', (request, response)=> {
-  
-    if(request.method === 'POST'){
-        return JSON.stringify(request.body)
+const app = express()
+>>>>>>> Stashed changes
+
+morgan.token('content' , (req) => {
+    if (req.method === 'POST') {
+    const body = req.body
+    return JSON.stringify(body)
     }
+    else return  ' '
 })
 
+app.use(cors())
+app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content' ))
 
 
-
+const maxValue = 100000000
 let persons = [
-    { 
-        "name": "Arto Hellas", 
-        "number": "040-123456",
-        "id": 1
+    {
+        id: 1,
+        name: "Arto Hellas",
+        number: "040-123456"
     },
-    { 
-        "name": "Ada Lovelace", 
-        "number": "39-44-5323523",
-        "id": 2
+    {
+        id: 2,
+        name: "Ada Lovelace",
+        number: "39-44-5323523"   
     },
-    { 
-        "name": "Dan Abramov", 
-        "number": "12-43-234345",
-        "id": 3
+    {
+        id: 3,
+        name: "Dan Abramov",
+        number: "12-43-234345"   
     },
-    { 
-        "name": "Mary Poppendieck", 
-        "number": "39-23-6423122",
-        "id": 4
-    }
-    
+    {
+        id: 4,
+        name: "Mary Poppendick",
+        number: "39-23-6423122"   
+    },
 ]
 
-const containsPerson = (obj) => {
-    let unique = false
-
-   persons.map( person => {
-        if (person.name === obj.name){            
-            return unique = true
-        }
-        })
-    return unique
-  
-}
-
-
-app.get('/api/persons',(request,response) => {
-    response.json(persons)
+app.get('/api/persons', (req,res) => {
+        res.json(persons)
 })
 
-app.get('/api/info', (request,response) => {
-    const date = new Date()
-    const info = `<p> Phone book has info for ${persons.length} people </p>
-                  <p>${date}</p>`;
-                
-    response.send(info)
+app.get('/info', (req,res) => {
+    const totalPersons = persons.length
+    const date = new Date
+    res.send(`<p>Phonebook has info for ${totalPersons} people</p>
+              <p>${date}</p>`)
 })
 
-app.get('/api/persons/:id', (request,response) => {
-    const id = Number(request.params.id)
-   
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+
+    if(person){
+        res.json(person)
+    }
+    else{
+        res.status(404).end()
+    }
 })
 
+app.delete('/api/persons/:id', (req,res) => {
+    const id = Number(req.params.id)
+    console.log(id)
+    persons = persons.filter(person => person.id !== id)
+    
+    res.status(204).end()
+
+})
+
+<<<<<<< Updated upstream
 app.delete('/api/persons/:id', (request,response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     console.log(persons)
     response.status(204).end
 })
+=======
+const randomId = (max) => {
+        
+    return Math.floor(Math.random() *Math.floor(max))
 
-app.post('/api/persons' , (request,response) => {
-    let body = request.body
+}
+>>>>>>> Stashed changes
 
-    if(!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'missing property'
+app.post('/api/persons', (req,res) => {
+    const body = req.body
+
+
+    if(!body.name || !body.number){
+        return res.status(400).json({
+            error: 'content missing'
         })
     }
 
-    if(containsPerson(body)){
-        return response.status(400).json({
-            error: 'name already exists'
+    const names = persons.map(person => person.name)
+    const duplicateName = names.includes(body.name)
+
+    if(duplicateName){
+        return res.status(400).json({
+            error: 'name must be unique'
         })
     }
 
     const person = {
+        id: randomId(maxValue),
         name: body.name,
-        number: body.number,
-        id: Math.floor(Math.random() * randomRange)
+        number: body.number
     }
 
     persons = persons.concat(person)
+<<<<<<< Updated upstream
     
     response.json(person)
    
+=======
+    res.json(person)
+>>>>>>> Stashed changes
+})
+
+app.put('/api/persons/:id', (req,res) => {
+    const id = Number(req.params.id)
+    const body = req.body
+    let idMap = persons.map(person => person.id)
+    console.log(idMap)
+    if (idMap.includes(id)){
+    persons = persons.map(person => {
+        if(person.id === id){
+            person.number = body.number
+        }
+        return person
+    })
+        res.send(body)
+    }
+    else{
+        res.status(404).end()
+    }
+
 })
 
 
 const PORT = 3001
 
-app.listen(PORT,() => {
-    console.log(`listening on on port ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Sever running on port ${PORT}`)
 })
-
-
