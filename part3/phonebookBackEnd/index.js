@@ -1,9 +1,12 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 
+
 app.use(express.json())
+app.use(cors())
 const randomRange = 100000000000
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
@@ -74,7 +77,6 @@ app.get('/api/persons/:id', (request,response) => {
 
 app.delete('/api/persons/:id', (request,response) => {
     const id = Number(request.params.id)
-
     persons = persons.filter(person => person.id !== id)
     console.log(persons)
     response.status(204).end
@@ -102,9 +104,8 @@ app.post('/api/persons' , (request,response) => {
     }
 
     persons = persons.concat(person)
-    console.log(persons)
-    response.json(person)
     
+    response.json(person)
    
 })
 

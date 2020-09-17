@@ -77,16 +77,6 @@ const App = () => {
     else setFilterState(false);
   };
 
-  const notificationHandler = (message,error) =>{
-    setMessage(`${message}`)
-    setError(error)
-    setTimeout(()=> {
-      setMessage(null)
-      setError(error)
-    },5000)
-    
-  }
-
   const filtered = filterState
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(filterName.toLowerCase())
