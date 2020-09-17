@@ -1,34 +1,24 @@
-<<<<<<< HEAD
+
 h1 {
     color: green
 }
 
-=======
-
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
+.error{
+    color: red;
     background: lightgrey;
     font-size: 20px;
     border-style: solid;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-<<<<<<< HEAD
-  }
+}
 
   .notification {
     color: green;
-=======
-
-
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
     background: lightgrey;
     font-size: 20px;
     border-style: solid;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-<<<<<<< HEAD
   }
-=======
-
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8

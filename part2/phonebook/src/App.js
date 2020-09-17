@@ -15,7 +15,6 @@ const App = () => {
   const [filterName, setFilter] = useState("");
   const [filterState, setFilterState] = useState(false);
   const [message, setMessage] = useState(null)
-<<<<<<< HEAD
   const [messageType, setMessageType] = useState(null)
 
 
@@ -27,9 +26,7 @@ const App = () => {
       setMessageType(null)
     }, 5000)
   };
-=======
-  const [error, setError] = useState(false)
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
+
 
   const dbHook = () => {
     personService
@@ -53,14 +50,11 @@ const App = () => {
         .removeEntry(id)
         .then(newEntry => {
           setPersons(persons.filter(person => person.id !== id))
-<<<<<<< HEAD
           createNotification(`Successfully deleted ${name} from server`, 'notification')
         })
         .catch( error => {
           createNotification(`Information for ${name} has already been removed from the server`, 'error')
-=======
-          notificationHandler(`${name} has been removed from the phonebok`,false)
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
+
         })
     }
 
@@ -112,7 +106,6 @@ const App = () => {
       personService
       .create(newPerson)
       .then(newEntry => {
-<<<<<<< HEAD
       setPersons(persons.concat(newEntry));
       setNewName("");
       setNewNumber("");
@@ -139,42 +132,6 @@ const App = () => {
             createNotification(`Updated the number for ${newPerson.name}`, 'notification')
           })
         }    
-        
-=======
-        setPersons(persons.concat(newEntry));
-        setNewName("");
-        setNewNumber("");
-        notificationHandler(`${newPerson.name} has been added to the phonebook`, false)
-      })
-      
-    } else {
-      const result = window.confirm(
-        `${newPerson.name} is already in the phonebook, replace old
-        number with new one?
-      `)
-      if(result){
-        const index = names.indexOf(newPerson.name)
-        const id = ids[index]
-        console.log(persons)
-        console.log(id)
-        personService
-        .alterNumber(newPerson, id)
-        .then(response => {
-          const people = [...persons]
-          people[index].number = newPerson.number
-          setPersons(people)
-          setNewName("");
-          setNewNumber("");
-          notificationHandler(`${newPerson.name} has been updated`,false)
-        })
-        .catch(error => {
-          notificationHandler(`Information for ${newPerson.name} has already been removed from the server`, true)
-          setPersons(persons.filter(person => person.id !== id))
-          setNewName("");
-          setNewNumber("");
-        })
-      }
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
     }
 
 
@@ -183,11 +140,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-<<<<<<< HEAD
+
       <Message message={message} messageType={messageType}/>
-=======
-      <Notification message={message} error={error}/>
->>>>>>> b2fbaf6a73bcdbc6d17fda0099a7281c05867da8
       <Filter filterHandler={filterHandler} filterName={filterName} />
       <h2>add new number</h2>
       <PersonForm
