@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import personService from './services/persons'
+import Message from './components/Message'
 
 import Filter from "./components/Filter";
 import Numbers from "./components/Numbers";
@@ -12,6 +13,18 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilter] = useState("");
   const [filterState, setFilterState] = useState(false);
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
+
+
+  const createNotification =(content,type) => {
+    setMessage(content)
+    setMessageType(type)
+    setTimeout( () => {
+      setMessage(null)
+      setMessageType(null)
+    }, 5000)
+  };
 
   const dbHook = () => {
     personService
@@ -28,15 +41,24 @@ const App = () => {
     const id = Number(target.getAttribute("id"))
     const name = target.getAttribute('name')
     const result = window.confirm(`Delete ${name}?`)
+  
 
     if(result) {
       personService
         .removeEntry(id)
         .then(newEntry => {
           setPersons(persons.filter(person => person.id !== id))
+          createNotification(`Successfully deleted ${name} from server`, 'notification')
+        })
+        .catch( error => {
+          createNotification(`Information for ${name} has already been removed from the server`, 'error')
         })
     }
+
+  
+
 }
+
 
   const nameHandler = (event) => {
     setNewName(event.target.value);
@@ -59,7 +81,6 @@ const App = () => {
     : persons;
 
 
-
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -77,16 +98,39 @@ const App = () => {
       setPersons(persons.concat(newEntry));
       setNewName("");
       setNewNumber("");
+      createNotification(`Added ${newPerson.name}`, 'notification')
       })
       
     } else {
-      alert(`${newPerson.name} already exists in phonebook`);
+       let confirmation = window.confirm(`${newPerson.name} has already been added to the phonebook, replace the old number with the new one?`);
+        if (confirmation){
+         let id;
+         let updatePersons = persons.map(person => {
+            if(person.name === newName){
+              person.number = newNumber
+              id = person.id
+          }
+          return person
+        })
+          personService
+          .alterNumber(newPerson, id)
+          .then( () => {
+            setPersons(updatePersons);
+            setNewName("");
+            setNewNumber("")
+            createNotification(`Updated the number for ${newPerson.name}`, 'notification')
+          })
+        }    
+        
     }
+
+
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message} messageType={messageType}/>
       <Filter filterHandler={filterHandler} filterName={filterName} />
       <h2>add new number</h2>
       <PersonForm
