@@ -4,19 +4,10 @@ const cors = require('cors')
 const morgan = require('morgan')
 const app = express()
 
+app.use(express.static('build'))
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(cors())
-/*const requestLogger = (req, res, next) => {
-    console.log('Method: ', req.method)
-    console.log('Path: ', req.path)
-    console.log('Body: ', req.body)
-    console.log('---')
-    next()
-}
-
-
-app.use(requestLogger) */
 
 
 let refresh = 0
@@ -44,9 +35,7 @@ let notes = [
 
 
 app.get('/', (req, res) => {
-    refresh++
-    console.log(refresh)
-    res.send(`<h1>This page has be loaded ${refresh} times<h1>`)
+  
 })
 
 app.get('/api/notes', (req, res) => {
@@ -128,6 +117,6 @@ app.use(unknownEndpoint)
 
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT)
 console.log(`server running on port ${PORT}`)

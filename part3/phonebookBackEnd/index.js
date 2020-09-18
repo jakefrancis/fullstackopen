@@ -2,22 +2,11 @@ const { json } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-<<<<<<< Updated upstream
 const app = express()
 
-
-
+app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
-const randomRange = 100000000000
-
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-=======
-const { default: Axios } = require('axios')
-
-const app = express()
->>>>>>> Stashed changes
-
 morgan.token('content' , (req) => {
     if (req.method === 'POST') {
     const body = req.body
@@ -81,26 +70,20 @@ app.get('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req,res) => {
     const id = Number(req.params.id)
     console.log(id)
+    const idMap = persons.map(person => person.id)
+    if(idMap.includes(id)){
     persons = persons.filter(person => person.id !== id)
     
     res.status(204).end()
+    }
+    else{
+    res.status(404).end()
+    }
 
 })
-
-<<<<<<< Updated upstream
-app.delete('/api/persons/:id', (request,response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    console.log(persons)
-    response.status(204).end
-})
-=======
-const randomId = (max) => {
-        
+const randomId = (max) => {        
     return Math.floor(Math.random() *Math.floor(max))
-
 }
->>>>>>> Stashed changes
 
 app.post('/api/persons', (req,res) => {
     const body = req.body
@@ -127,16 +110,12 @@ app.post('/api/persons', (req,res) => {
         number: body.number
     }
 
-    persons = persons.concat(person)
-<<<<<<< Updated upstream
-    
-    response.json(person)
-   
-=======
+    persons = persons.concat(person)  
+
     res.json(person)
->>>>>>> Stashed changes
 })
 
+/* I wasn't supposed to implement this
 app.put('/api/persons/:id', (req,res) => {
     const id = Number(req.params.id)
     const body = req.body
@@ -149,17 +128,17 @@ app.put('/api/persons/:id', (req,res) => {
         }
         return person
     })
-        res.send(body)
+        res.json(body)
     }
     else{
         res.status(404).end()
     }
 
 })
+*/
 
-
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     console.log(`Sever running on port ${PORT}`)
-})
+});

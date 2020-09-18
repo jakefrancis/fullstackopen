@@ -3,23 +3,6 @@ import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import noteService from './services/notes'
-import Notification from './components/Notification'
-
-
-
-const Footer = () => {
-  const footerStyle = {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 16
-  }
-  return (
-    <div style={footerStyle}>
-      <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2020</em>
-    </div>
-  )
-}
 
 
 const App = () => {
@@ -74,11 +57,7 @@ const App = () => {
     })
     .catch(error => {
       setErrorMessage(
-<<<<<<< Updated upstream
-      `the note ${note.content} was already deleted from the server`
-=======
         `Note '${note.content}' was already removed from server` 
->>>>>>> Stashed changes
       )
       setTimeout(() => {
         setErrorMessage(null)
@@ -94,11 +73,7 @@ const App = () => {
     return (
       <div>
         <h1>Notes</h1>
-<<<<<<< Updated upstream
-        <Notification message={errorMessage} />
-=======
         <Notification message={errorMessage}/>
->>>>>>> Stashed changes
         <div>
           <button onClick={() => setShowAll(!showAll)} >
             show {showAll ? 'important': 'all'}
