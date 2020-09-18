@@ -69,7 +69,6 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req,res) => {
     const id = Number(req.params.id)
-    console.log(id)
     const idMap = persons.map(person => person.id)
     if(idMap.includes(id)){
     persons = persons.filter(person => person.id !== id)
