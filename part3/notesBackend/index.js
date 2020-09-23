@@ -68,14 +68,8 @@ const generateId = () => {
   return maxId + 1
 }
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', (req, res, next) => {
   const body = req.body
-
-  if (body.content === undefined){
-    return res.status(400).json({
-      error: 'content missing'
-    })
-  }
 
   const note = new Note ({
     content: body.content,
@@ -83,9 +77,14 @@ app.post('/api/notes', (req, res) => {
     date: new Date(),
   })
 
-  note.save().then(saveNote => {
-    res.json(saveNote)
-  })
+  note.save()
+    .then(savedNote => {
+      return savedNote.toJSON()
+    })
+    .then(savedAndFormattedNote => {
+      res.json(savedAndFormattedNote)
+    })
+    .catch(error => next(error))
 
 })
 
@@ -125,6 +124,8 @@ const errorHandler = (error, req, res, next) => {
 
   if(error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id'})
+  } else if(error.name === 'Validation Error') {
+    return response.status(400).json({error: error.message})
   }
 
   next(error)
