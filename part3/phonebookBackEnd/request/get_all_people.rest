@@ -1,1 +1,1 @@
-get https://stark-badlands-07986.herokuapp.com/api/persons
+get http://localhost:3001/api/persons

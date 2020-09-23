@@ -1,8 +1,10 @@
-const { json } = require('express')
+require('dotenv').config()
+const { json, response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Contact = require('./models/contact')
 
 app.use(express.static('build'))
 app.use(express.json())
@@ -45,39 +47,37 @@ let persons = [
 ]
 
 app.get('/api/persons', (req,res) => {
-        res.json(persons)
+       Contact.find({})
+       .then(persons => {
+           res.json(persons)
+       })
 })
 
 app.get('/info', (req,res) => {
-    const totalPersons = persons.length
-    const date = new Date
-    res.send(`<p>Phonebook has info for ${totalPersons} people</p>
-              <p>${date}</p>`)
+    Contact.find({})
+        .then(persons => {
+            const totalPersons = persons.length
+            const date = new Date
+            res.send(`<p>Phonebook has info for ${totalPersons} people</p>
+            <p>${date}</p>`)
+    })
+   
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if(person){
-        res.json(person)
-    }
-    else{
-        res.status(404).end()
-    }
+    Contact.findById(req.params.id)
+        .then(person => res.json(person))
 })
 
-app.delete('/api/persons/:id', (req,res) => {
-    const id = Number(req.params.id)
-    const idMap = persons.map(person => person.id)
-    if(idMap.includes(id)){
-    persons = persons.filter(person => person.id !== id)
-    
-    res.status(204).end()
-    }
-    else{
-    res.status(404).end()
-    }
+app.delete('/api/persons/:id', (req,res,next) => {
+
+    Contact.findByIdAndRemove(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+        .catch(error => {
+            next(error)
+        })
 
 })
 const randomId = (max) => {        
@@ -86,57 +86,64 @@ const randomId = (max) => {
 
 app.post('/api/persons', (req,res) => {
     const body = req.body
-
-
+    
     if(!body.name || !body.number){
         return res.status(400).json({
             error: 'content missing'
         })
     }
 
-    const names = persons.map(person => person.name)
-    const duplicateName = names.includes(body.name)
-
-    if(duplicateName){
-        return res.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
-        id: randomId(maxValue),
+    const person = new Contact({
         name: body.name,
         number: body.number
-    }
-
-    persons = persons.concat(person)  
-
-    res.json(person)
-})
-
-/* I wasn't supposed to implement this
-app.put('/api/persons/:id', (req,res) => {
-    const id = Number(req.params.id)
-    const body = req.body
-    let idMap = persons.map(person => person.id)
-    console.log(idMap)
-    if (idMap.includes(id)){
-    persons = persons.map(person => {
-        if(person.id === id){
-            person.number = body.number
-        }
-        return person
     })
-        res.json(body)
+
+    person.save()
+        .then(savedPerson => {
+            res.json(savedPerson)
+        }
+    )
+})
+
+
+app.put('/api/persons/:id', (req,res, error) => {
+    const body = req.body
+
+    const person = {
+        name: body.name,
+        number: body.number,
     }
-    else{
-        res.status(404).end()
-    }
+
+    Contact.findByIdAndUpdate(req.params.id, person, {new : true})
+        .then(updatedPerson => {
+            res.json(updatedPerson)
+        })
+        .catch(error => next(error))
+    
 
 })
-*/
 
-const PORT = process.env.PORT || 3001
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message)
+
+    if (error.name === 'CastError'){
+        return response.status(400).send({error: 'malformatted id'})
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
+
+
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
     console.log(`Sever running on port ${PORT}`)

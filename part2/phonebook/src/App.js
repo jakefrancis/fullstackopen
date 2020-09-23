@@ -40,7 +40,7 @@ const App = () => {
   useEffect(dbHook,[])
   const removePerson = (event) => {
     const target = event.target
-    const id = Number(target.getAttribute("id"))
+    const id = target.getAttribute("id")
     const name = target.getAttribute('name')
     const result = window.confirm(`Delete ${name}?`)
   
@@ -90,6 +90,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+
     const names = persons.map((person) => person.name)
     const ids = persons.map((person => person.id))
     if (!names.includes(newPerson.name)) {
