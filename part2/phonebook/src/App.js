@@ -5,7 +5,7 @@ import Message from './components/Message'
 import Filter from "./components/Filter";
 import Numbers from "./components/Numbers";
 import PersonForm from "./components/PersonForm";
-import Notification from "./components/Notification"
+
 
 
 const App = () => {
@@ -43,8 +43,6 @@ const App = () => {
     const id = target.getAttribute("id")
     const name = target.getAttribute('name')
     const result = window.confirm(`Delete ${name}?`)
-  
-
     if(result) {
       personService
         .removeEntry(id)
@@ -94,6 +92,7 @@ const App = () => {
     const names = persons.map((person) => person.name)
     const ids = persons.map((person => person.id))
     if (!names.includes(newPerson.name)) {
+      console.log('here')
       personService
       .create(newPerson)
       .then(newEntry => {
@@ -102,25 +101,36 @@ const App = () => {
       setNewNumber("");
       createNotification(`Added ${newPerson.name}`, 'notification')
       })
+      .catch(error => {
+        console.log(error.response.data)
+        createNotification(`Error: ${error.response.data.error}`, 'error')
+      })
       
     } else {
        let confirmation = window.confirm(`${newPerson.name} has already been added to the phonebook, replace the old number with the new one?`);
         if (confirmation){
          let id;
          let updatePersons = persons.map(person => {
-            if(person.name === newName){
-              person.number = newNumber
-              id = person.id
+            let copy = {...person}
+            if(copy.name === newName){
+              copy.number = newNumber
+              id = copy.id
           }
-          return person
+          return copy
         })
+          console.log(updatePersons)
           personService
           .alterNumber(newPerson, id)
-          .then( () => {
+          .then((response) => { /*
+            console.log('here')
             setPersons(updatePersons);
             setNewName("");
             setNewNumber("")
-            createNotification(`Updated the number for ${newPerson.name}`, 'notification')
+            createNotification(`Updated the number for ${newPerson.name}`, 'notification')*/
+          })
+          .catch(error => {
+            console.log(error.response.data)
+            createNotification(`Error: ${error.response.data.error}`, 'error')
           })
         }    
     }

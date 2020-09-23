@@ -4,9 +4,7 @@ const Message = ({message, messageType}) => {
     if(message === null){
         return null
     }
-
-    console.log(messageType)
-
+    
     return (
         <div className={messageType}>
             {message}

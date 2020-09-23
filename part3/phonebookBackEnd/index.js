@@ -84,7 +84,7 @@ const randomId = (max) => {
     return Math.floor(Math.random() *Math.floor(max))
 }
 
-app.post('/api/persons', (req,res) => {
+app.post('/api/persons', (req,res,next) => {
     const body = req.body
     
     if(!body.name || !body.number){
@@ -101,20 +101,26 @@ app.post('/api/persons', (req,res) => {
     person.save()
         .then(savedPerson => {
             res.json(savedPerson)
-        }
-    )
+        })
+        .catch(error => {
+            next(error)
+        })
 })
 
 
-app.put('/api/persons/:id', (req,res, error) => {
+app.put('/api/persons/:id', (req,res, next) => {
     const body = req.body
 
     const person = {
-        name: body.name,
         number: body.number,
     }
 
-    Contact.findByIdAndUpdate(req.params.id, person, {new : true})
+    const options = {
+        new: true,
+        runValidators: true
+    }
+    
+    Contact.findByIdAndUpdate(req.params.id, person, options)
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
@@ -133,8 +139,11 @@ const errorHandler = (error, req, res, next) => {
     console.log(error.message)
 
     if (error.name === 'CastError'){
-        return response.status(400).send({error: 'malformatted id'})
+        return res.status(400).send({error: 'malformatted id'})
     }
+    else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
+      }
 
     next(error)
 }
