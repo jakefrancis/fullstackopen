@@ -1,9 +1,9 @@
-post http://localhost:3001/api/blogs
+post http://localhost:3003/api/blogs
 content-type: application/json
 
 {
   "title": "The Joys of Cooking",
-  "author": "Ben Dover",
+  "author": "Bend Dover",
   "url": "https://123fakeaddress.com",
   "likes": 3
 }
