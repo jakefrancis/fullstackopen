@@ -1,0 +1,2 @@
+
+delete https://stark-badlands-07986.herokuapp.com/api/persons/42688244
