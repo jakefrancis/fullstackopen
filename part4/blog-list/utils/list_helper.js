@@ -75,19 +75,56 @@ const favoriteBlog = (blogs) => {
 */
 
 const mostBlogs = (blogs) => {
-
+  //lodash
+  // creates object of all author names and ther occurrences { alice: 5, bob: 6}
   let authors =  _.countBy(blogs, (blog) => blog.author)
-
+  //transform object into an array of objects. [{author: alice, blogs: 5}, {author:bob, blogs: 6}]
   authors = _.transform(authors, (result, value, key) => {
     result.push({
       author: key,
       blogs : value
     })
   }, [])
-
+  //returns author with most blogs {author: alice, blogs: 6}
   return _.maxBy(authors, (author) => author.blogs )
 
 }
+
+const mostLikes = (blogs) => {
+//get number of articles and sum all the likes when they occur
+//return the author with the most likes
+
+  let authors = blogs.map( blog => {
+    let obj = {}
+    obj[blog.author] = blog.likes
+    return obj
+  })
+  let combined = {}
+
+  authors.forEach(blog => {Object.entries(blog).forEach(author => {
+    const [key, value] = author
+    if(!combined[key]){
+      combined[key] = value
+    }
+    else{
+      combined[key] += value
+    }
+  })
+  })
+  combined = _.transform(combined, (result, value, key) => {
+    result.push({
+      author: key,
+      likes : value
+    })
+  }, [])
+
+  return _.maxBy(combined, (author) => author.likes)
+
+}
+
+
+
+
 
 
 module.exports = {
@@ -95,4 +132,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes
 }

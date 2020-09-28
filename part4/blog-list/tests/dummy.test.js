@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { testEnviroment } = require('../jest.config')
 const listHelper = require('../utils/list_helper')
 
