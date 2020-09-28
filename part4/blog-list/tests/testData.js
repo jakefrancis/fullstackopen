@@ -60,7 +60,6 @@ const blogs = [
   }
 ]
 
-
 module.exports = {
   listWithOneBlog,
   blogs
