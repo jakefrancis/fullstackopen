@@ -135,6 +135,8 @@ const App = () => {
         }    
     }
 
+    console.log('consta resets?')
+
 
   };
 
