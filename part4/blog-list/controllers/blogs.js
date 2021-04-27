@@ -26,15 +26,20 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   }
   const blog = new Blog(newBlog)
   const savedBlog = await blog.save()
-  console.log(savedBlog)
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
   response.status(201).json(savedBlog)
 })
 
 blogsRouter.delete('/:id', userExtractor, async (request,response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  const blogToBeDeleted = await Blog
+    .findById(request.params.id)
+  if(blogToBeDeleted.user.toString() === request.user.id){
+    await Blog.findByIdAndRemove(request.params.id)
+    return response.status(204).end()
+  }
+  response.status(401).end()
+  
 })
 
 blogsRouter.put('/:id', async (request,response) => {

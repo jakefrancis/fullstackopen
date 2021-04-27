@@ -4,15 +4,21 @@ const helper = require('./testData')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const jwt = require('jsonwebtoken')
 const { testEnvironment } = require('../jest.config')
 const { deleteOne } = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
 
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[0])
+
   for(let blog of helper.blogs){
-    let blogObject = new Blog(blog)
-    await blogObject.save()
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'bearer ' + login.body.token)
+      .send(blog)
   }
 
 })
@@ -39,8 +45,11 @@ test('a valid blog can be added', async () => {
     url: 'https://eloquentjavascript.net/04_data.html',
     likes: 10
   }
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[0])
 
   await api.post('/api/blogs')
+    .set('Authorization', 'bearer ' + login.body.token)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -52,13 +61,31 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('a blog cannot be added without token', async () => {
+  const newBlog =  {
+    title: 'Eloquent Javascript: Chapter 4',
+    author: 'Marijn Haverbeke',
+    url: 'https://eloquentjavascript.net/04_data.html',
+    likes: 10
+  }
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+})
+
+
 test('likes default to zero if empty', async () => {
   const newBlog =  {
     title: 'Eloquent Javascript: Chapter 6',
     author: 'Marijn Haverbeke',
     url: 'https://eloquentjavascript.net/06_data.html',
   }
+
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[0])
+
   await api.post('/api/blogs')
+    .set('Authorization', 'bearer ' + login.body.token)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -72,7 +99,11 @@ test('blog without title and url is not added', async () => {
     author: 'Marijn Haverbeke',
     likes: 10
   }
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[0])
+
   await api.post('/api/blogs')
+    .set('Authorization', 'bearer ' + login.body.token)
     .send(newBlog)
     .expect(400)
     .expect('Content-Type', /application\/json/)
@@ -83,13 +114,33 @@ test('blog without title and url is not added', async () => {
 test('blog can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const  blogToDelete = blogsAtStart[0]
-  await api
-    .delete(`/api/blogs/${blogToDelete.id}`)
+
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[0])
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', 'bearer ' + login.body.token)
     .expect(204)
+
   const blogsAtEnd = await helper.blogsInDb()
   expect(blogsAtEnd).toHaveLength(helper.blogs.length - 1)
   const titles = blogsAtEnd.map(blog => blog.title)
   expect(titles).not.toContain(blogToDelete.title)
+})
+
+test('blog cannot be deleted by user who did not create it', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const  blogToDelete = blogsAtStart[0]
+
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[1])
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', 'bearer ' + login.body.token)
+    .expect(401)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.blogs.length)
 })
 
 test('blog likes can be updated', async () => {

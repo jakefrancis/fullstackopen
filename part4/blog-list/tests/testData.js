@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const listWithOneBlog = [
   {
@@ -62,6 +63,7 @@ const initialUsers = [
   },
 
 ]
+
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
