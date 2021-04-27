@@ -2,6 +2,7 @@ const listHelper = require('../utils/list_helper')
 const testData = require('./testData')
 
 
+
 describe('total likes', () => {
 
   test('when list has only one blog, sum the likes of that', () => {
@@ -19,3 +20,4 @@ describe('total likes', () => {
     expect(result).toBe(0)
   })
 })
+
