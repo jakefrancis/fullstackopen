@@ -1,0 +1,9 @@
+post http://localhost:3003/api/blogs
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpmcmFuY2lzIiwiaWQiOiI2MDg5MjRiNTQ3Y2IzNjRmMzIxNWRkYzUiLCJpYXQiOjE2MTk2MDA2NTB9.rxMEtacOSIg_hcJxJ8Ax4bJM8PThGa3bGbzfYW1LigE
+{
+  "title": "Vampires",
+  "author": "Hugh Lycan",
+  "url": "https://werevolews.com",
+  "likes": 12
+}
