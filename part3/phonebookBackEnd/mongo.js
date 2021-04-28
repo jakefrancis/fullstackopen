@@ -1,11 +1,13 @@
-/*const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 if (process.argv.length < 3){
   console.log('Please provide a password: node mongo.js <password>')
   process.exit()
 }
 
-const url =
+const password = process.argv[2]
+
+const url = `mongodb+srv://Jake:${password}@part3.1kzc9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const contactSchema = mongoose.Schema({
@@ -14,4 +16,4 @@ const contactSchema = mongoose.Schema({
 })
 
 const Contact = mongoose.model('Contact', contactSchema)
-*/
+

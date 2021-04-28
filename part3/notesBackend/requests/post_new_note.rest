@@ -1,7 +1,6 @@
-POST http://localhost:3001/api/notes
+POST https://zurb.com/api/cows/unlock
 content-type: application/json
 
 {
-    "content": "REST",
-    "important" : true
+    "key":"3OeWrqjoUpfgoYX3g9TY1dJd8KpbjFFg7KIHB8pB49x6A7hj2pj4kuNMITeh\nNQN9\n"
 }
