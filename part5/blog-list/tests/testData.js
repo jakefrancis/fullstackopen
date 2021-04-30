@@ -1,6 +1,5 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 
 const listWithOneBlog = [
   {
@@ -16,7 +15,7 @@ const blogs = [
     title: 'React patterns',
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
-    likes: 7,
+    likes: 0,
   },
   {
     title: 'Go To Statement Considered Harmful',

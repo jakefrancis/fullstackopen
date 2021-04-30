@@ -12,7 +12,7 @@ describe('total likes', () => {
 
   test('when list has greater than one blog, sum the likes of that', () => {
     const result = listHelper.totalLikes(testData.blogs)
-    expect(result).toBe(36)
+    expect(result).toBe(29)
   })
 
   test('when list has no blogs, sum the likes', () => {

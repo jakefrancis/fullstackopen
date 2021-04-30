@@ -12,7 +12,7 @@ blogsRouter.post('/', async (request,response) => {
   const body = request.body
   const minimumLength = 3
   if(body.password.length < minimumLength){
-    return response.status(400).json( {error: `password must be at least ${minimumLength} characters`})
+    return response.status(400).json( { error: `password must be at least ${minimumLength} characters` })
   }
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
