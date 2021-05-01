@@ -11,7 +11,7 @@ Personal repository to track my progress through the [fullstackopen](https://ful
 
  ✔️ Part  0: Fundamentals of Web apps  
  ✔️ Part  1: Introduction to React  
- ✔️ Part  2: Programming a server with NodeJS and Express  
+ ✔️ Part  2: Communicating with a server 
  ✔️ Part  3: Programming a server with NodeJS and Express  
  ✔️ Part  4: Testing Express servers, user administration  
  ✔️ Part  5: Testing React apps  
