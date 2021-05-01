@@ -1,44 +1,70 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 
-const BlogForm = ({author,authorHandler,title,titleHandler,url,urlHandler,addBlog}) => {
-  
+const BlogForm = ({
+  createBlog
+}) => {
 
-  
+  const [author, setAuthor] = useState('')
+  const [title, setTitle] = useState('')
+  const [url, setUrl] = useState('')
+
+  const authorHandler = (event) => {
+    setAuthor(event.target.value)
+  }
+  const titleHandler = (event) => {
+    setTitle(event.target.value)
+  }
+  const urlHandler = (event) => {
+    setUrl(event.target.value)
+  }
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    createBlog({ author,title,url })
+    setTitle('')
+    setUrl('')
+    setAuthor('')
+  }
+
+
   return (
-  
-      <form onSubmit={addBlog}>
-        <h2>Create New</h2>
-        <div>
+
+    <form onSubmit={addBlog}>
+      <h2>Create New</h2>
+      <div>
          Title:
         <input
+          id='title'
           type='text'
           name='Title'
           value={title}
           onChange={titleHandler}
         />
-        </div>
-        <div>
+      </div>
+      <div>
           Author:
         <input
+          id='author'
           type='text'
           value={author}
           name='Author'
           onChange={authorHandler}
         />
-        </div>
-        <div>
+      </div>
+      <div>
           Url:
         <input
+          id='url'
           type='text'
           value={url}
           name='Url'
           onChange={urlHandler}
-        />        
-        </div>   
-        <button type="submit">save</button>
-      </form>  
-    
+        />
+      </div>
+      <button type="submit">save</button>
+    </form>
+
   )
 }
 

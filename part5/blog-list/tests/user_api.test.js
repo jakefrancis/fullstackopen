@@ -5,7 +5,6 @@ const helper = require('./testData')
 const app = require('../app')
 const User = require('../models/user')
 const api = supertest(app)
-const { testEnvironment } = require('../jest.config')
 
 
 
@@ -30,7 +29,7 @@ test('all users returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('return all users in db', async () => { 
+test('return all users in db', async () => {
   const response = await api.get('/api/users')
   expect(response.body).toHaveLength(helper.initialUsers.length)
 })
@@ -47,7 +46,7 @@ test('successfully create new user', async () => {
     .post('/api/users')
     .send(newUser)
     .expect(200)
-    .expect('Content-Type', /application\/json/)  
+    .expect('Content-Type', /application\/json/)
   const usersAtEnd = await helper.usersInDb()
   expect(usersAtEnd).toHaveLength(helper.initialUsers.length + 1)
 })

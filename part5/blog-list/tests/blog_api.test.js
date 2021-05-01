@@ -4,12 +4,17 @@ const helper = require('./testData')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const jwt = require('jsonwebtoken')
-const { testEnvironment } = require('../jest.config')
-const { deleteOne } = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  for(const user of helper.initialUsers){
+    await api.post('/api/users')
+      .send(user)
+  }
+
 
   const login = await api.post('/api/login')
     .send(helper.initialUsers[0])
@@ -113,6 +118,7 @@ test('blog without title and url is not added', async () => {
 
 test('blog can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
+  const usersAtStart = await helper.usersInDb()
   const  blogToDelete = blogsAtStart[0]
 
   const login = await api.post('/api/login')
@@ -126,6 +132,9 @@ test('blog can be deleted', async () => {
   expect(blogsAtEnd).toHaveLength(helper.blogs.length - 1)
   const titles = blogsAtEnd.map(blog => blog.title)
   expect(titles).not.toContain(blogToDelete.title)
+
+  const usersAtEnd = await helper.usersInDb()
+  expect(usersAtStart[0].blogs).toHaveLength(usersAtEnd[0].blogs.length + 1)
 })
 
 test('blog cannot be deleted by user who did not create it', async () => {
@@ -147,13 +156,29 @@ test('blog likes can be updated', async () => {
   const blogsAtStart = await helper.blogsInDb()
   let blogToUpdate = { ...blogsAtStart[0] }
   blogToUpdate.likes += 1
+
+  const login = await api.post('/api/login')
+    .send(helper.initialUsers[1])
+
   await api
     .put(`/api/blogs/${blogToUpdate.id}`)
+    .set('Authorization', 'bearer ' + login.body.token)
     .send(blogToUpdate)
     .expect(200)
     .expect('Content-Type', /application\/json/)
   const blogsAtEnd = await helper.blogsInDb()
   expect(blogsAtEnd[0].likes).not.toEqual(blogsAtStart[0].likes)
+  expect(blogsAtEnd[0].likedBy.length).not.toEqual(blogsAtStart[0].likedBy.length)
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .set('Authorization', 'bearer ' + login.body.token)
+    .send(blogToUpdate)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  const blogsAtVeryEnd = await helper.blogsInDb()
+  expect(blogsAtVeryEnd[0].likes).toEqual(blogsAtStart[0].likes)
+  expect(blogsAtVeryEnd[0].likedBy.length).toEqual(blogsAtStart[0].likedBy.length)
 })
 
 
