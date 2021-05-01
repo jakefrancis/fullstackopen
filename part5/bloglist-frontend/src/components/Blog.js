@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 const Blog = ({ blog, updateLike,user, deleteBlog }) => {
   const [detailedView, setDetailedView] = useState(true)
   const [liked, setLiked] = useState(false)
@@ -35,6 +35,10 @@ const Blog = ({ blog, updateLike,user, deleteBlog }) => {
     setLiked(usernames.includes(user))
   }
 
+  useEffect(() => {
+    setDetailedView(true)
+  },[])
+
   return (
     <div style={blogStyle} className='blog'>
       <p className='description'>{blog.title} - {blog.author}</p>
@@ -46,7 +50,8 @@ const Blog = ({ blog, updateLike,user, deleteBlog }) => {
           <button onClick={detailHandler}>hide</button>
           <br></br>
           <a href={blog.url.slice(0,4) !== 'http' ? '//'+blog.url : blog.url}>{blog.url}</a>
-          <p>likes:{blog.likes}<button className ='likeButton' onClick={likeHandler}>{ liked ? 'unlike' : 'like'}</button></p>
+          <p className='likes'>likes:{blog.likes}</p>
+          <button className ='likeButton' onClick={likeHandler}>{ liked ? 'unlike' : 'like'}</button>
           <h3>{blog.user.name}</h3>
           {user === blog.user.username ? <button onClick={deleteHandler}>remove</button> : null}
         </div>
