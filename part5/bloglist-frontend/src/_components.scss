@@ -1,0 +1,250 @@
+//////////////////////////////
+/// Login Form
+
+.login{
+  padding: 4.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  border-bottom: var(--line);
+  align-self: center; 
+  justify-self: center; 
+  margin: 20% auto;
+  border-radius: 1rem;
+  background-color: var(--color-navy-dark-3);
+
+  &__icon{
+    width: 5rem;
+    height: 5rem;
+    fill: var(--color-primary)
+  }
+
+  &__label{
+    font-weight: 600;
+  }
+
+  &__input{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+}
+
+//////////////////////////////
+/// Button Inline
+
+.btn-inline{
+  text-transform: uppercase;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  background-color: transparent;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  display: inline-block;
+  cursor: pointer;
+  transition: .2s;
+
+  &:hover{
+    color: var(--color-grey-dark-1);
+  }
+
+}
+
+//////////////////////////////
+/// Notification
+
+.notification{
+  color: var(--color-primary);
+  font-weight: 900;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  background-color: var(--color-navy-dark-1);
+  border-radius: 1rem;
+  padding: 1rem 0.5rem;
+  &__error{
+    border-radius: 1rem;
+    padding: 1rem 0.5rem;
+    background-color: var(--color-grey-light-2);
+    color: var(--color-error);
+  }
+}
+
+//////////////////////////////
+/// logout
+
+.logout{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  &__user{
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+  }
+}
+
+//////////////////////////////
+/// sidebar
+
+.show__blogform{
+  padding: 2rem 1rem;
+  background-color: var(--color-navy-dark-1);
+  background-color: var(--color-grey-light-2);
+  flex: 0 0 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+  &__btn{
+    font-size: 1.5rem;
+    align-self: center;
+  }
+}
+
+.toggle{
+  display: flex;
+  flex-direction: column;
+}
+//////////////////////////////
+/// blog form
+
+.blog-form{
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--color-navy-dark-);
+
+  &__input{
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;    
+  }
+
+  &__button{
+    margin-top: 1.5rem;
+    font-size: 1.5rem;
+  }
+}
+
+
+.blog-container{
+  padding: 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 60rem;
+  flex: 1;
+  background-color: var(--color-grey-light-2);
+  background-color: var(--color-navy-dark-1);
+}
+
+.blog{
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-bottom: var(--line);
+  margin-bottom: 1rem;
+  padding: 1rem 2rem;
+  background-color: var(--color-navy-dark-3);
+  box-shadow: var(--shadow-light);
+  color: var(--color-navy-dark-2);
+  font-weight: 600;
+  
+
+  &__details{
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__description{
+    display: flex;
+    align-items: center;
+    
+    &--title{
+      font-size: 1.7rem;
+        
+      }
+    
+    &--author{
+      margin-left: 1.2rem;
+    }
+  }
+  &__button{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    &--likes{
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-left: 10rem;
+      font-size: 1.2rem;
+      color: var(--color-primary);;
+    }
+  }
+  &__info{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__like-container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    &--like-button{
+      border: none;
+      background: inherit;  
+  }
+  
+
+  }
+
+  &__link:link,&__link:visited{
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--color-primary);
+
+  }
+  &__link:hover{
+    color: var(--color-navy-dark-2);
+  }
+
+  &__icon{
+
+    &--like{
+      cursor: pointer;
+      width: 4rem;
+      height: 4rem;
+      fill: var(--color-primary);
+    }
+    &--unlike{
+      cursor: pointer;
+      width: 4rem;
+      height: 4rem;
+      fill: var(--color-navy-dark-2);
+    }
+      
+      
+  }
+
+
+  &__posted{
+    display: flex;
+    &--remove{
+      margin-left: 4rem;
+    }
+  }
+
+  
+}
+
+//////////////////////////////
+/// Blogform

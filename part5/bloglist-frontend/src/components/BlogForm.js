@@ -30,10 +30,10 @@ const BlogForm = ({
 
   return (
 
-    <form onSubmit={addBlog}>
+    <form className='blog-form' onSubmit={addBlog}>
       <h2>Create New</h2>
-      <div>
-         Title:
+      <div className='blog-form__input'>
+        <label>Title</label>
         <input
           id='title'
           type='text'
@@ -42,8 +42,8 @@ const BlogForm = ({
           onChange={titleHandler}
         />
       </div>
-      <div>
-          Author:
+      <div className='blog-form__input'>
+        <label>Author</label>
         <input
           id='author'
           type='text'
@@ -52,8 +52,8 @@ const BlogForm = ({
           onChange={authorHandler}
         />
       </div>
-      <div>
-          Url:
+      <div className='blog-form__input'>
+        <label>Url</label>
         <input
           id='url'
           type='text'
@@ -62,7 +62,7 @@ const BlogForm = ({
           onChange={urlHandler}
         />
       </div>
-      <button type="submit">save</button>
+      <button className='btn-inline blog-form__button'type="submit">save</button>
     </form>
 
   )

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Icon from './Icon'
 
 
 const LoginForm = ({ login }) => {
@@ -23,19 +24,21 @@ const LoginForm = ({ login }) => {
   }
 
   return (
-    <form onSubmit={handleLogin} id='loginForm'>
-      <div>
-      username
+    <form className='login' onSubmit={handleLogin} id='loginForm'>
+      <Icon component='login' iconName='lock-closed-outline'/>
+      <div className='login__input'>
+        <label className='login__label'>Username</label>
         <input
           id='username'
           type="text"
           value={username}
           name="Username"
           onChange={usernameHandler}
+          label='Username:'
         />
       </div>
-      <div>
-      password
+      <div className='login__input'>
+        <label className='login__label'>Password</label>
         <input
           id='password'
           type="password"
@@ -44,7 +47,7 @@ const LoginForm = ({ login }) => {
           onChange={passwordHandler}
         />
       </div>
-      <button type="submit">login</button>
+      <button className='btn-inline' type="submit">login</button>
     </form>
   )
 }
